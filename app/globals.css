@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/* Dark mode follows the resolved theme on <html data-theme>, not the OS directly,
+   so Light / Dark / System all work and persist. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-text: var(--text);
+  --color-soft: var(--soft);
+  --color-mute: var(--mute);
+
+  /* Accent: user-chosen. Drives primary buttons, active nav, focus, selection, links. */
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
+
+  /* Semantic status colors: never change with the accent. */
+  --color-blocked: var(--blocked);
+  --color-blocked-soft: var(--blocked-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-review: var(--review);
+  --color-review-soft: var(--review-soft);
+
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --raised: #f0f0f3;
+  --line: #e4e4ea;
+  --line-strong: #cfcfd8;
+  --text: #16161b;
+  --soft: #474753;
+  --mute: #6f6f7d;
+
+  --blocked: #c0263f;
+  --blocked-soft: #fdecef;
+  --warn: #9a5a00;
+  --warn-soft: #fdf2df;
+  --ok: #18794e;
+  --ok-soft: #e5f5ec;
+  --review: #1f62b0;
+  --review-soft: #e7f0fb;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111114;
+  --surface: #19191e;
+  --raised: #212127;
+  --line: #2b2b33;
+  --line-strong: #3b3b46;
+  --text: #ececf1;
+  --soft: #b6b6c2;
+  --mute: #8b8b9b;
+
+  --blocked: #ff7d8f;
+  --blocked-soft: #3a1820;
+  --warn: #f3b44e;
+  --warn-soft: #36280f;
+  --ok: #5fd39a;
+  --ok-soft: #12301f;
+  --review: #84b7f5;
+  --review-soft: #142739;
+}
+
+/* Accents. Each has a light and dark variant tuned for contrast, not inverted. */
+[data-accent="blue"] { --accent: #2160d8; --accent-fg: #ffffff; --accent-soft: #e8effc; --accent-text: #1c54bf; }
+[data-accent="indigo"] { --accent: #4b47d6; --accent-fg: #ffffff; --accent-soft: #ecebfb; --accent-text: #423ec2; }
+[data-accent="violet"] { --accent: #7a3fd4; --accent-fg: #ffffff; --accent-soft: #f2eafc; --accent-text: #6c35bf; }
+[data-accent="emerald"] { --accent: #0b7d5c; --accent-fg: #ffffff; --accent-soft: #e2f4ee; --accent-text: #0a6e51; }
+[data-accent="orange"] { --accent: #c4510f; --accent-fg: #ffffff; --accent-soft: #fcede3; --accent-text: #ad470c; }
+
+[data-theme="dark"][data-accent="blue"] { --accent: #6ea4ff; --accent-fg: #0b1730; --accent-soft: #172440; --accent-text: #93bbff; }
+[data-theme="dark"][data-accent="indigo"] { --accent: #9896ff; --accent-fg: #141238; --accent-soft: #211f45; --accent-text: #b2b0ff; }
+[data-theme="dark"][data-accent="violet"] { --accent: #b997ff; --accent-fg: #1f1236; --accent-soft: #2a1d42; --accent-text: #cbb2ff; }
+[data-theme="dark"][data-accent="emerald"] { --accent: #47cfa0; --accent-fg: #062a1e; --accent-soft: #11302a; --accent-text: #72dcb6; }
+[data-theme="dark"][data-accent="orange"] { --accent: #ff9a57; --accent-fg: #2f1404; --accent-soft: #3a2214; --accent-text: #ffb27f; }
+
+html, body { background: var(--bg); color: var(--text); }
+body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+input, textarea, select { accent-color: var(--accent); }
+
+@keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+.scanbar { animation: scan 1.1s ease-in-out infinite; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .3s ease-out both; }
+@keyframes settle { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 45%, transparent); } 100% { box-shadow: 0 0 0 12px transparent; } }
+.settle { animation: settle 1.2s ease-out 2; }
+@keyframes pulse-dot { 50% { opacity: .35; } }
+.listening { animation: pulse-dot 1s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.caret { animation: blink 1s step-end infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scanbar, .rise, .settle, .listening, .caret { animation: none !important; }
+}
